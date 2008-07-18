@@ -16,9 +16,8 @@ namespace IronEditor.UI.WinForms
             DefaultExtension = Properties.Settings.Default.DefaultExtension;
         }
 
-        public static void SaveUserSettings(UserSettings settings)
+        public static void SaveUserSettings(IsolatedStorageFile isoFile, UserSettings settings)
         {
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForDomain();
             IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream( "UserSettings.xml", FileMode.OpenOrCreate, FileAccess.Write, isoFile);
 
             try
@@ -32,9 +31,17 @@ namespace IronEditor.UI.WinForms
             }
         }
 
-        public static UserSettings LoadUserSettings()
+        public static IsolatedStorageFile GetIsolatedStorage()
         {
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetUserStoreForDomain();
+            return IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
+                                                IsolatedStorageScope.Assembly |
+                                                IsolatedStorageScope.Domain,
+                                                null,
+                                                null);
+        }
+
+        public static UserSettings LoadUserSettings(IsolatedStorageFile isoFile)
+        {
             IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream("UserSettings.xml", FileMode.OpenOrCreate, FileAccess.Read, isoFile);
 
             try

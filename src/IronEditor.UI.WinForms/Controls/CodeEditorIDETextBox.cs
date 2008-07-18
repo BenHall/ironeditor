@@ -8,13 +8,28 @@ namespace IronEditor.UI.WinForms.Controls
         public new event IDETextBoxEvent.TextChangedHandler TextChanged;
 
         private CodeEditorControl codeEditorControl;
-        public CodeEditorIDETextBox()
+        public CodeEditorIDETextBox(string fileExtension)
         {
             InitializeComponent();
-            this.Dock = DockStyle.Fill;
+            Dock = DockStyle.Fill;
 
             codeEditorControl = new CodeEditorControl();
-            codeEditorControl.Document.SyntaxFile = "SyntaxFiles\\IronPython.syn";
+
+            switch (fileExtension)
+            {
+                case ".cs":
+                    codeEditorControl.Document.SyntaxFile = "SyntaxFiles\\CSharp.syn";
+                    break;
+                case ".py":
+                    codeEditorControl.Document.SyntaxFile = "SyntaxFiles\\IronPython.syn";
+                    break;
+                default:
+                    codeEditorControl.Document.SyntaxFile = "SyntaxFiles\\AutoIt.syn";
+                    break;
+            }
+
+
+
             codeEditorControl.Dock = DockStyle.Fill;
             codeEditorControl.Document.ModifiedChanged += Document_ModifiedChanged;
             Controls.Add(codeEditorControl);

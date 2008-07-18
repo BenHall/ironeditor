@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using System.Reflection;
 
 namespace IronEditor.Engine.Tests
 {
@@ -66,6 +68,63 @@ namespace IronEditor.Engine.Tests
             cache.GetEngine(ruby, null);
             cache.GetEngine(python, null);
             Assert.AreEqual(2, cache.CachedEngines);
+        }
+
+        [Test]
+        public void AppendPathToEngines_ValidPath_EngineHavePathAdded()
+        {
+            string path = Environment.CurrentDirectory;
+            LanguageSettings ruby = Helper.CreateIronRubySettings();
+            EngineCache cache = new EngineCache();
+            cache.AppendPathToEngines(path);
+            IEngine engine = cache.GetEngine(ruby, null);
+
+            bool found = false;
+            foreach (string s in engine.ScriptSourceSearch())
+            {
+                if (s == path)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(found);
+        }
+
+
+        [Test]
+        public void AppendPathToEngines_ValidPath_2EnginesHavePathAdded()
+        {
+            string path = Environment.CurrentDirectory;
+            LanguageSettings ruby = Helper.CreateIronRubySettings();
+            LanguageSettings python = Helper.CreateIronPythonSettings();
+            EngineCache cache = new EngineCache();
+            cache.AppendPathToEngines(path);
+            IEngine rubyEngine = cache.GetEngine(ruby, null);
+            IEngine pythonEngine = cache.GetEngine(python, null);
+
+            bool rubyFound = false;
+            foreach (string s in rubyEngine.ScriptSourceSearch())
+            {
+                if (s == path)
+                {
+                    rubyFound = true;
+                    break;
+                }
+            }
+            bool pythonFound = false;
+            foreach (string s in pythonEngine.ScriptSourceSearch())
+            {
+                if (s == path)
+                {
+                    pythonFound = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(rubyFound);
+            Assert.IsTrue(pythonFound);
         }
     }
 }

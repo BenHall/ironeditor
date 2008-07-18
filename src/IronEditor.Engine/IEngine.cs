@@ -8,6 +8,8 @@ namespace IronEditor.Engine
         string GetSaveFilter();
         string LanguageName { get; }
         bool CanExecuteConsole { get; }
+        void AddPath(string path);
+        string[] ScriptSourceSearch();
         void LaunchConsole();
     }
 

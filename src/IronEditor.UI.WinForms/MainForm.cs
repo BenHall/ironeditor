@@ -24,7 +24,7 @@ namespace IronEditor.UI.WinForms
             Text = string.Format(Text, ApplicationInformation.Title(), ApplicationInformation.Version());
 
             SetButtonsStatus();
-            ApplyUserSettings(ApplicationOptions.LoadUserSettings());
+            ApplyUserSettings(ApplicationOptions.LoadUserSettings(ApplicationOptions.GetIsolatedStorage()));
         }
 
         void mainForm_KeyDown(object sender, KeyEventArgs e)
@@ -222,7 +222,7 @@ namespace IronEditor.UI.WinForms
             if(dialog.ShowDialog() == DialogResult.OK)
             {
                 UserSettings settings = CreateUserSettings(dialog);
-                ApplicationOptions.SaveUserSettings(settings);
+                ApplicationOptions.SaveUserSettings(ApplicationOptions.GetIsolatedStorage(), settings);
                 ApplyUserSettings(settings);
             }
         }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Scripting.Hosting;
@@ -40,6 +42,18 @@ namespace IronEditor.Engine
             {
                 return !string.IsNullOrEmpty(Language.CommandLineApplication) && File.Exists(PathToConsoleApplication);
             }
+        }
+
+        public void AddPath(string path)
+        {
+            paths.Add(path);
+            Engine.SetScriptSourceSearchPaths(ScriptSourceSearch());
+        }
+
+        private List<string> paths = new List<String> { Environment.CurrentDirectory, Path.Combine(Environment.CurrentDirectory, "Lib") };
+        public string[] ScriptSourceSearch()
+        {
+            return paths.ToArray();
         }
 
         private string PathToConsoleApplication

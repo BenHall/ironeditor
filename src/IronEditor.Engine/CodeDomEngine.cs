@@ -89,6 +89,16 @@ namespace IronEditor.Engine
             get { return false; }
         }
 
+        public void AddPath(string path)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string[] ScriptSourceSearch()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void LaunchConsole()
         {
             throw new System.InvalidOperationException("Console application is not available for this engine.");

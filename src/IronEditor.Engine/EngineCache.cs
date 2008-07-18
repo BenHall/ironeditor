@@ -39,5 +39,11 @@ namespace IronEditor.Engine
                 engine = new DLREngine(language, outputStream);
             return engine;
         }
+
+        public void AppendPathToEngines(string path)
+        {
+            foreach (KeyValuePair<LanguageSettings, IEngine> pair in Engines)
+                pair.Value.AddPath(path);
+        }
     }
 }

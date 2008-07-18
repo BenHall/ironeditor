@@ -20,7 +20,7 @@ namespace IronEditor.UI.WinForms.Dialogs
         {
             InitializeComponent();
 
-            UserSettings settings = ApplicationOptions.LoadUserSettings();
+            UserSettings settings = ApplicationOptions.LoadUserSettings(ApplicationOptions.GetIsolatedStorage());
             fontControl = new FontControl(settings);
             fontControl.Dock = DockStyle.Top;
 

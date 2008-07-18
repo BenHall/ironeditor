@@ -195,6 +195,7 @@ namespace IronEditor.UI.WinForms
             if(folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 Clear();
+                EngineCache.AppendPathToEngines(folderBrowserDialog.SelectedPath);
                 MainForm.OpenProject(folderBrowserDialog.SelectedPath);
             }
         }
