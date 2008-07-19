@@ -6,6 +6,7 @@ namespace IronEditor.Engine
     public class EngineCache
     {
         private Dictionary<LanguageSettings, IEngine> Engines;
+        List<string> paths = new List<string>();
         public int CachedEngines
         {
             get
@@ -37,13 +38,24 @@ namespace IronEditor.Engine
                 engine = new CodeDomEngine(language, outputStream);
             else
                 engine = new DLREngine(language, outputStream);
+
+            SetPaths(engine);
+
             return engine;
+        }
+
+        private void SetPaths(IEngine engine)
+        {
+            foreach (string path in paths)
+                engine.AddPath(path);
         }
 
         public void AppendPathToEngines(string path)
         {
+            paths.Add(path);
+
             foreach (KeyValuePair<LanguageSettings, IEngine> pair in Engines)
-                pair.Value.AddPath(path);
+                SetPaths(pair.Value);
         }
     }
 }

@@ -79,15 +79,7 @@ namespace IronEditor.Engine.Tests
             cache.AppendPathToEngines(path);
             IEngine engine = cache.GetEngine(ruby, null);
 
-            bool found = false;
-            foreach (string s in engine.ScriptSourceSearch())
-            {
-                if (s == path)
-                {
-                    found = true;
-                    break;
-                }
-            }
+            bool found = EngineHasPath(path, engine);
 
             Assert.IsTrue(found);
         }
@@ -104,27 +96,54 @@ namespace IronEditor.Engine.Tests
             IEngine rubyEngine = cache.GetEngine(ruby, null);
             IEngine pythonEngine = cache.GetEngine(python, null);
 
-            bool rubyFound = false;
-            foreach (string s in rubyEngine.ScriptSourceSearch())
-            {
-                if (s == path)
-                {
-                    rubyFound = true;
-                    break;
-                }
-            }
-            bool pythonFound = false;
+            bool rubyFound = EngineHasPath(path, rubyEngine);
+
+            bool pythonFound = EngineHasPath(path, pythonEngine);
+
+            Assert.IsTrue(rubyFound);
+            Assert.IsTrue(pythonFound);
+        }
+
+        private bool EngineHasPath(string path, IEngine pythonEngine)
+        {
+            bool found = false;
             foreach (string s in pythonEngine.ScriptSourceSearch())
             {
                 if (s == path)
                 {
-                    pythonFound = true;
+                    found = true;
                     break;
                 }
             }
+            return found;
+        }
 
-            Assert.IsTrue(rubyFound);
-            Assert.IsTrue(pythonFound);
+        [Test]
+        public void AppendPathToEngines_AddPathBeforeEngineCreated_PathAdded()
+        {
+            string path = Environment.CurrentDirectory;
+            LanguageSettings ruby = Helper.CreateIronRubySettings();
+            EngineCache cache = new EngineCache();
+            cache.AppendPathToEngines(path);
+            IEngine engine = cache.GetEngine(ruby, null);
+
+            bool found = EngineHasPath(path, engine);
+
+            Assert.IsTrue(found);
+        }
+
+        [Test]
+        public void AppendPathToEngines_AddPathAfterEngineCreated_PathAdded()
+        {
+            string path = Environment.CurrentDirectory;
+            LanguageSettings ruby = Helper.CreateIronRubySettings();
+            EngineCache cache = new EngineCache();
+            IEngine engine = cache.GetEngine(ruby, null);
+            cache.AppendPathToEngines(path);
+
+            bool found = EngineHasPath(path, engine);
+
+            Assert.IsTrue(found);
         }
     }
 }

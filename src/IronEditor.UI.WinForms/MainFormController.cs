@@ -109,6 +109,7 @@ namespace IronEditor.UI.WinForms
                 if (newProjectDialog.ProjectType == "Project")
                 {
                     Clear();
+                    EngineCache.AppendPathToEngines(newProjectDialog.ProjectPath);
                     MainForm.OpenProject(newProjectDialog.ProjectPath);
                 }
                 else
@@ -195,8 +196,8 @@ namespace IronEditor.UI.WinForms
             if(folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 Clear();
-                EngineCache.AppendPathToEngines(folderBrowserDialog.SelectedPath);
                 MainForm.OpenProject(folderBrowserDialog.SelectedPath);
+                EngineCache.AppendPathToEngines(folderBrowserDialog.SelectedPath);
             }
         }
 

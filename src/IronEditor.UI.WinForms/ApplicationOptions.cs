@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.IsolatedStorage;
 using System.Reflection;
+using System.Security.Policy;
 using System.Xml.Serialization;
 
 namespace IronEditor.UI.WinForms
@@ -34,11 +36,23 @@ namespace IronEditor.UI.WinForms
         public static IsolatedStorageFile GetIsolatedStorage()
         {
             return IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
-                                                IsolatedStorageScope.Assembly |
-                                                IsolatedStorageScope.Domain,
-                                                null,
-                                                null);
+                                                 IsolatedStorageScope.Assembly |
+                                                 IsolatedStorageScope.Domain,
+                                                 GetTypeFromEvidence(AppDomain.CurrentDomain.Evidence, typeof(Url)),
+                                                 GetTypeFromEvidence(Assembly.GetAssembly(typeof(ApplicationOptions)).Evidence, typeof(Url)));
         }
+
+
+        private static object GetTypeFromEvidence(Evidence evidence, Type type)
+        {
+            foreach (object e in evidence)
+            {
+                if (e.GetType().Equals(type))
+                    return e;
+            }
+            return null;
+        }
+
 
         public static UserSettings LoadUserSettings(IsolatedStorageFile isoFile)
         {

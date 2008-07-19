@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.IO;
 using System.IO.IsolatedStorage;
 using IronEditor.UI.WinForms;
 using NUnit.Framework;
@@ -18,13 +17,17 @@ namespace IronEditor.Engine.Tests
         }
 
         [Test]
+        public void GetIsolatedStorage_HasDomainID_AssemblyID()
+        {
+            IsolatedStorageFile isoFile = ApplicationOptions.GetIsolatedStorage();
+            Assert.IsNotNull(isoFile.DomainIdentity);
+            Assert.IsNotNull(isoFile.AssemblyIdentity);
+        }
+
+        [Test]
         public void SaveUserSettings_UIFont_WritesToIsolatedStorage()
         {
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
-                                                                       IsolatedStorageScope.Assembly |
-                                                                       IsolatedStorageScope.Domain,
-                                                                       null,
-                                                                       null);
+            IsolatedStorageFile isoFile = ApplicationOptions.GetIsolatedStorage();
             UserSettings settings = CreateSettings();
             ApplicationOptions.SaveUserSettings(isoFile, settings);
 
@@ -34,11 +37,7 @@ namespace IronEditor.Engine.Tests
         [Test]
         public void LoadSettings_WritesToIsolatedStorage_UIFont()
         {
-            IsolatedStorageFile isoFile = IsolatedStorageFile.GetStore(IsolatedStorageScope.User |
-                                                           IsolatedStorageScope.Assembly |
-                                                           IsolatedStorageScope.Domain,
-                                                           null,
-                                                           null);
+            IsolatedStorageFile isoFile = ApplicationOptions.GetIsolatedStorage();
             UserSettings savedSettings = CreateSettings();
             ApplicationOptions.SaveUserSettings(isoFile, savedSettings);
 
